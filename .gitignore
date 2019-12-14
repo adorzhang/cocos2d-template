@@ -1,0 +1,5 @@
+cocos2d/
+proj.win32/
+proj.android/
+proj.ios_mac/
+proj.linux/
