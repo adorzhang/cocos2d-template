@@ -1,0 +1,4 @@
+#ifndef __STRING_FORMAT_HELPER_H__
+#define __STRING_FORMAT_HELPER_H__
+
+#endif // __STRING_FORMAT_HELPER_H__

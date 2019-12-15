@@ -1,0 +1,4 @@
+#ifndef __SOUND_CONTROLLER_H__
+#define __SOUND_CONTROLLER_H__
+
+#endif // __SOUND_CONTROLLER_H__
