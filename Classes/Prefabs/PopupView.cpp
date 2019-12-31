@@ -17,12 +17,12 @@ or (at your option) any later version.
 2. The second license, which is not free, apply only for licensee who got
 a written agreement from the 'Udinsoft Team'. The exact wording of this
 license can be obtained from the 'Udinsoft Team'. In essence this
-Udin Engine Unrestricted License state that the GNU Lesser General Public License
+Cocos2d Template Unrestricted License state that the GNU Lesser General Public License
 applies except that the software is distributed with no limitation or
 requirements to publish or give back to the Udinsoft Team changes made
-to the Udin Engine source code.
+to the Cocos2d Template source code.
 
-By default, the first type of license applies (the GNU LGPL), the Udin Engine
+By default, the first type of license applies (the GNU LGPL), the Cocos2d Template
 Unrestricted License apply only for those who got a written agreement
 from the Udinsoft Team.
 
@@ -38,22 +38,59 @@ http://www.gnu.org/copyleft/lesser.txt.
 For the Cocos2d Template Unrestricted License contact the Udinsoft Team.
 -----------------------------------------------------------------------------
 */
+#include "PopupView.h"
+#include "PopupController.h"
+USING_NS_CC;
 
-#ifndef __SPLASH_SCENE_H__
-#define __SPLASH_SCENE_H__
-
-#include "SceneBase.h"
-
-class SplashScene : public SceneBase
+bool PopupView::init(PopupController* popupController)
 {
-public:
-	static cocos2d::Scene* createScene();
-	virtual bool init();
-	virtual void changeScene(cocos2d::Scene scene);
-	CREATE_FUNC(SplashScene);
+	if (!Layer::init())
+		return false;
 
-	// a selector callback
-	void menuCloseCallback(cocos2d::Ref* pSender);
-};
+	this->popupController = popupController;
+	this->scaleFactor = 1.0f;
+	
+	isCloseLocked = false;
+	isTapBackgroundToPopView = false;
 
-#endif // __SPLASH_SCENE_H__
+	return true;
+}
+
+PopupView::~PopupView()
+{
+	
+}
+
+void PopupView::setCloseLocked(bool value)
+{
+	isCloseLocked = value;
+}
+
+void PopupView::setTapBackgroundToPopView(bool value)
+{
+	isTapBackgroundToPopView = value;
+}
+
+void PopupView::adjustScaleSize(bool value)
+{
+	if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS &&
+		(popupController->screenSize.height == 1024.0 ||
+			popupController->screenSize.height == 768.0)) {
+
+		scaleFactor = 0.5f;
+	}
+	else {
+		Size contentSize = this->getContentSize();
+		float padding = 0.0f;
+		if (value) {
+			padding = popupController->screenSize.height*0.5f;
+		}
+		this->scaleFactor = (popupController->screenSize.height) / (contentSize.height + padding);
+	}
+	this->setScale(scaleFactor);
+}
+
+void PopupView::adjustScaleSize()
+{
+	this->adjustScaleSize(true);
+}

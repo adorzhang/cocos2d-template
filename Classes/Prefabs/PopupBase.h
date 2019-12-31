@@ -38,55 +38,65 @@ http://www.gnu.org/copyleft/lesser.txt.
 For the Cocos2d Template Unrestricted License contact the Udinsoft Team.
 -----------------------------------------------------------------------------
 */
-#include "GameEngine.h"
-#include "Constants.h"
-#include "UIHelper.h"
-#include "SplashScene.h"
+#ifndef __POPUP_BASE_H__
+#define __POPUP_BASE_H__
+#include "cocos2d.h"
+#include "cocos-ext.h"
+
+#include "PopupView.h"
 
 USING_NS_CC;
-
-GameEngine* gameEngine = NULL;
-GameEngine* GameEngine::getInstance()
+USING_NS_CC_EXT;
+#define kCTDButtonMax       1
+class PopupBase : public PopupView
 {
-	if (gameEngine == NULL)
-	{
-		gameEngine = new GameEngine();
-	}
-	return gameEngine;
-}
-
-bool GameEngine::init() 
-{
-
-	UIHelper::cacheSprites();
-
-	return true;
-}
-
-void GameEngine::start() 
-{
-
-	this->changeScene(SPLASH_SCENE);
-}
-
-void GameEngine::changeScene(SCENE scene) 
-{
-	switch (scene)
-	{
-	case SPLASH_SCENE:
-		Director::getInstance()->replaceScene(TransitionFade::create(TRANSITION_TIME, SplashScene::createScene()));
-		break;
-	default:
-		break;
-	}
+protected:
 	
-}
+	/*ui::Scale9Sprite*       background;
+	Node*					frontBackground;
+	Label*					title;
+	ui::Scale9Sprite*       header;
+	Menu*					help;
+	Menu*					closeButton;
+	Menu*					menu[kCTDButtonMax];
+	void*                   entity;
+	bool                    isCloseButtonEnabled;*/
+	//LoadingLayer*           m_loadingLayer;
+public:
+	PopupBase();
+	virtual ~PopupBase();
 
-GameEngine::GameEngine()
-{
+	static PopupBase* create(PopupController* parentPopupController, cocos2d::Size size);
+	//cocos2d::Node* getFrontBackground() const { return frontBackground; }
 
-}
-GameEngine::~GameEngine()
-{
+	virtual bool init(PopupController* parentPopupController, cocos2d::Size size);
+	virtual void createContent(float leftMargin, float rightMargin, float topMargin, float bottomMargin);
+	virtual void createContent(float topMargin, float bottomMargin, float leftMargin, float rightMargin, float contentXShift, float contentYShift);
+	virtual void createFrontBackground(ui::Scale9Sprite sprite);
 
-}
+	virtual void update(float delta) {}
+
+	virtual void updateContent() {}
+
+	virtual void moveBy(float x, float y);
+
+	virtual void addTitle(const char *filename);
+
+	virtual void showLoading();
+
+	virtual void hideLoading();
+
+	virtual void addHelpButton(const char* noteId, cocos2d::CallFunc* callback);
+
+	virtual void setTitle(const char* name);
+
+	virtual void onClose(cocos2d::Ref *sender);
+
+	virtual void onButton(cocos2d::Ref *sender);
+
+	//void setCloseButtonEnabled(bool enabled) { isCloseButtonEnabled = enabled; }
+
+	//void *getEntity() { return entity; }
+
+};
+#endif // __POPUP_BASE_H__

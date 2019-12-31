@@ -38,55 +38,65 @@ http://www.gnu.org/copyleft/lesser.txt.
 For the Cocos2d Template Unrestricted License contact the Udinsoft Team.
 -----------------------------------------------------------------------------
 */
-#include "GameEngine.h"
-#include "Constants.h"
-#include "UIHelper.h"
-#include "SplashScene.h"
+#ifndef __POPUP_CONTROLLER_H__
+#define __POPUP_CONTROLLER_H__
+#include "cocos2d.h"
+#include "cocos-ext.h"
 
-USING_NS_CC;
+#define kPopupViewTransitionDuration  0.1f
+#define kPopupViewMinimizeScale       0.5f
+class PopupView;
 
-GameEngine* gameEngine = NULL;
-GameEngine* GameEngine::getInstance()
+class PopupController : public cocos2d::Layer
 {
-	if (gameEngine == NULL)
-	{
-		gameEngine = new GameEngine();
-	}
-	return gameEngine;
-}
+public:
+	cocos2d::Size	screenSize;
+	std::vector<PopupView*> views;
+	cocos2d::Sequence	*actionPoppingUp;
+	void *userObject;
 
-bool GameEngine::init() 
-{
+	static PopupController* create();
+	virtual bool init();
+	//void setHitBGToCloseAllEnabled(bool enabled) { isHitBgToCloseAllEnabled = enabled; }
 
-	UIHelper::cacheSprites();
+	void setSender(void *sender);
+	void(*onWillPushView)(void *sender);
+	void(*onWillPopView)(void *sender, void* view);
+	void(*onPushView)(void *sender);
+	void(*onPopView)(void *sender);
+	void(*onCloseAll)(void *sender);
+	void(*onHitShadow)(cocos2d::Vec2&, void *sender);
 
-	return true;
-}
 
-void GameEngine::start() 
-{
+	void pushView(PopupView *v);
+	void popView(bool isCallback);
+	void popView();
+	void closeAll();
+	int getNStackView();
+	static void hitShadow(void *inst, void *sender);
 
-	this->changeScene(SPLASH_SCENE);
-}
+	void(*willPushViewAtIndex)(int ind);
+	void(*willPopViewAtIndex)(int ind);
+	void(*didPushViewAtIndex)(int ind);
+	void(*didPopViewAtIndex)(int ind);
 
-void GameEngine::changeScene(SCENE scene) 
-{
-	switch (scene)
-	{
-	case SPLASH_SCENE:
-		Director::getInstance()->replaceScene(TransitionFade::create(TRANSITION_TIME, SplashScene::createScene()));
-		break;
-	default:
-		break;
-	}
-	
-}
+	static void hideAllChildrensAnimated(cocos2d::Node* root, float duration);
+	static void hideAllChildrensAnimated(cocos2d::Node* root, float duration, void* except);
+	static void showAllChildrensAnimated(cocos2d::Node* root, float duration);
+	static void showAllChildrensAnimated(cocos2d::Node* root, float duration, void* except);
 
-GameEngine::GameEngine()
-{
+private:
+	void                                *sender;
+	//bool                                isHitBgToCloseAllEnabled;
 
-}
-GameEngine::~GameEngine()
-{
+	void clearAllViews();
+	void removePopupView(cocos2d::Node *node, void* sender);
+	void removeLastPopupView(cocos2d::Node *node, void* sender);
 
-}
+	void showView(PopupView *view);
+	void hideView(PopupView *view);
+	void hideViewRelease(PopupView *view);
+	void hideAllViews(PopupView *view);
+
+};
+#endif // __POPUP_CONTROLLER_H__

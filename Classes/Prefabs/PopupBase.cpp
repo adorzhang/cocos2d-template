@@ -17,12 +17,12 @@ or (at your option) any later version.
 2. The second license, which is not free, apply only for licensee who got
 a written agreement from the 'Udinsoft Team'. The exact wording of this
 license can be obtained from the 'Udinsoft Team'. In essence this
-Udin Engine Unrestricted License state that the GNU Lesser General Public License
+Cocos2d Template Unrestricted License state that the GNU Lesser General Public License
 applies except that the software is distributed with no limitation or
 requirements to publish or give back to the Udinsoft Team changes made
-to the Udin Engine source code.
+to the Cocos2d Template source code.
 
-By default, the first type of license applies (the GNU LGPL), the Udin Engine
+By default, the first type of license applies (the GNU LGPL), the Cocos2d Template
 Unrestricted License apply only for those who got a written agreement
 from the Udinsoft Team.
 
@@ -39,21 +39,87 @@ For the Cocos2d Template Unrestricted License contact the Udinsoft Team.
 -----------------------------------------------------------------------------
 */
 
-#ifndef __SPLASH_SCENE_H__
-#define __SPLASH_SCENE_H__
+#include "PopupBase.h"
 
-#include "SceneBase.h"
-
-class SplashScene : public SceneBase
+PopupBase::PopupBase() : PopupView()
 {
-public:
-	static cocos2d::Scene* createScene();
-	virtual bool init();
-	virtual void changeScene(cocos2d::Scene scene);
-	CREATE_FUNC(SplashScene);
 
-	// a selector callback
-	void menuCloseCallback(cocos2d::Ref* pSender);
-};
+}
 
-#endif // __SPLASH_SCENE_H__
+PopupBase::~PopupBase()
+{
+
+}
+
+PopupBase* PopupBase::create(PopupController* parentPopupController, cocos2d::Size size)
+{
+	PopupBase *pRet = new PopupBase();
+	pRet->init(parentPopupController, size);
+	pRet->autorelease();
+	return pRet;
+}
+
+
+bool PopupBase::init(PopupController* parentPopupController, cocos2d::Size size)
+{
+	if (!PopupView::init(parentPopupController)) {
+		return false;
+	}
+
+	return true;
+}
+
+void PopupBase::createContent(float leftMargin, float rightMargin, float topMargin, float bottomMargin)
+{
+
+}
+void PopupBase::createContent(float topMargin, float bottomMargin, float leftMargin, float rightMargin, float contentXShift, float contentYShift)
+{
+
+}
+
+void PopupBase::createFrontBackground(ui::Scale9Sprite sprite)
+{
+
+}
+
+void PopupBase::moveBy(float x, float y)
+{
+
+}
+
+
+void PopupBase::addTitle(const char *filename)
+{
+
+}
+
+void PopupBase::showLoading()
+{
+
+}
+
+void PopupBase::hideLoading()
+{
+
+}
+
+void PopupBase::addHelpButton(const char* noteId, cocos2d::CallFunc* callback)
+{
+
+}
+
+void PopupBase::setTitle(const char* name)
+{
+
+}
+
+void PopupBase::onClose(cocos2d::Ref *sender)
+{
+
+}
+
+void PopupBase::onButton(cocos2d::Ref *sender)
+{
+
+}
